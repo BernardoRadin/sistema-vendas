@@ -1,0 +1,52 @@
+.container{
+    padding: 25px;
+}
+
+.table{
+    border-collapse: collapse;
+    width: 60%;
+    margin-top: 60px;
+}
+
+input[type=date]{
+    height: 35px;
+    width: 130px;
+    margin-bottom: 20px;
+    font-size: 15px;
+}
+
+.enviar{
+    color:aliceblue;
+    background-color: rgb(235, 130, 1);
+    border: transparent;
+    border-radius: 3px;
+    height: 38px;
+    width: 110px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.enviar:hover{
+    background-color: rgb(225, 109, 26);
+    transition: 0.3s;
+}
+
+table, th, td {
+    border: 1px solid black;
+    margin: auto;
+}
+
+th{
+    font-weight: bold;
+    color: white;
+    background-color: rgb(225, 109, 26);
+}
+    
+th, td{
+    padding: 10px;
+    text-align: center;
+}
+
+.valorcompra{
+    color: rgb(239, 38, 38);
+}

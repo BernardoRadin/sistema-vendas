@@ -1,0 +1,92 @@
+.container{
+    padding: 25px;
+}
+
+.center{
+    margin-left: 120px;
+}
+
+.titulo{
+    font-size: 24px;
+    border-bottom: solid;
+    border-width: 2px;
+}
+
+.foreach{
+    float: left;
+    border-top: solid;
+    width: 220px; 
+    height: auto;
+    cursor: pointer;
+    margin: 20px;
+    margin-top: 52px;
+}
+
+.p-nome{
+    margin-top: 20px;
+}
+.foreach > p{
+    padding: 2px;
+}
+
+.clear{
+    clear:both;
+}
+
+.container2{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0.3;
+    z-index: 1;
+}
+
+.caixa{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+.caixa-meio{
+    width: 40%;
+    height: auto;
+    background-color: white;
+    z-index: 2;
+    position: absolute;
+    text-align: center;
+    padding-top: 20px;
+}
+
+input[type=text]{
+    height: 35px;
+    width: 70%;
+    margin-bottom: 20px;
+    font-size: 15px;
+}
+
+select{
+    margin-bottom: 20px;
+    height: 40px;
+    width: 70%;
+    font-size: 15px;
+}
+
+.editar{
+    color:aliceblue;
+    background-color: rgb(235, 130, 1);
+    border: transparent;
+    border-radius: 3px;
+    height: 38px;
+    width: 110px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.editar:hover{
+    background-color: rgb(199, 110, 1);
+    transition: 0.3s;
+}
