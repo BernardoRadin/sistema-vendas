@@ -13,7 +13,7 @@
         <div class="container">
             <div class="box1">
                     <div class="image">
-                        <img class="img" src="<?php echo INCLUDE_PATH; ?>images/pedreiro">
+                        <img class="img" src="images/construcao.png">
                     </div>
                     <div>
                         <h2 class="h">1</h2>
@@ -24,7 +24,7 @@
             </div>
             <div class="box2">
                 <div class="image">
-                    <img class="img" src="<?php echo INCLUDE_PATH; ?>images/engenharia.png">
+                    <img class="img" src="images/engrenagem.png">
                 </div>
                 <div>
                     <h2 class="h">2</h2>
@@ -35,7 +35,7 @@
             </div>
             <div class="box3">
                 <div class="image">
-                    <img class="img" src="<?php echo INCLUDE_PATH; ?>images/construcao.png">
+                    <img class="img" src="images/construtor.png">
                 </div>
                 <div>
                     <h2 class="h">3</h2>

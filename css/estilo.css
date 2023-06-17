@@ -4,6 +4,10 @@
     font-family:Arial, Helvetica, sans-serif
 }
 
+/* body{
+    min-width: 324px;
+} */
+
 .container{
     margin: 0 auto;
     padding: 0;
@@ -47,12 +51,19 @@
 .ul > li > a{
     text-decoration: none;
     color:rgb(177, 98, 1);
+    cursor: pointer
+}
+
+.ul > li > img{
+    width: 50px;
+    position: relative;
+    top: -15px;
+    cursor: pointer
 }
 
 .ul >.home{
     font-weight: bold;
-    text-decoration: none;
-
+    text-decoration: none
 }
 
 .clear{
@@ -82,6 +93,7 @@
 }
 
 .text > p{
+    color:white;
     text-align: justify;
 }
 
@@ -103,6 +115,16 @@
     color: white;
 }
 
+.cadastrar{
+    color:aliceblue;
+    background-color: rgb(235, 130, 1);
+    border: transparent;
+    border-radius: 7px;
+    height: 38px;
+    width: 110px;
+    font-size: 16px;
+    cursor: pointer;
+}
 
 .cadastrar:hover{
     background-color: rgb(177, 98, 1);
@@ -115,7 +137,7 @@
     color: rgb(235, 130, 1);
 }
 
-section > .overlay{
+.overlay{
     background-color:black;
     opacity: 0.6;
     position: absolute;
@@ -169,7 +191,7 @@ section > .overlay{
     padding-bottom: 20px;
 }
 
-.eu{
+.empresa{
     width: auto;
     height: auto;
     color: white;
@@ -179,12 +201,18 @@ section > .overlay{
 
 .information{
     display: inline-block;
+    margin-right: 20px;
 }
 
-.eu > div > .img-border > img{
+.empresa > div > .img-border > img{
  border: transparent;
  border-radius: 110px;
  width: 130px;
+}
+
+.empresa > div > h3{
+    padding-top: 5px;
+    padding-right: 7px;
 }
 
 .texto{
@@ -194,16 +222,34 @@ section > .overlay{
     text-align: justify;
 }
 
-.img-border{
-    border-right: solid;
-}
-
 .dados{
     display: inline-block;
     width: 500px;
     vertical-align: top;
 }
 
+.menu{
+    position: absolute;
+    right: 0;
+    background-color: rgb(223, 122, 0);
+    width: 100px;
+    height: 120px;
+    border-radius: 7px;
+    z-index: 3;
+    color: white;
+    opacity: 0.9;
+    text-align: center;
+    display: none
+}
+
+.menu > ul > li,.menu > ul > li > a{
+    text-decoration: none;
+    list-style: none; 
+    opacity: 1;
+    cursor: pointer;
+    padding: 5px;
+    color: white;
+}
 
 .dados > p{
     text-align: justify;
@@ -238,14 +284,25 @@ section > .overlay{
     }
 }
 
-@media screen and (max-width: 882px){
+@media screen and (max-width: 538px){
     .login{
         display: none;
     }
-    .ul > li{
+    .ul > li > a{
+        display: none;
+    }
+
+    .menu-click{
+        display: block;
+    }
+}
+
+@media screen and (min-width: 538px){
+    .menu-click{
         display: none;
     }
 }
+
 
 @media screen and (max-width: 1407px){
     .title{
@@ -258,12 +315,13 @@ section > .overlay{
     }
 }
 
-@media screen and (max-width: 1051px) {
+@media screen and (max-width: 1168px) {
     .img-border{
         border: none;
     }
     .information{
         padding-bottom: 10px;
+        margin-right: 0px;
     }
     .texto >p {
         text-align: justify;
@@ -273,11 +331,11 @@ section > .overlay{
     }
     .dados{
         margin-top: 30px;
-        width: 90%;
-       }
+        width: 90%
+    }
 }
 
-@media screen and (min-width: 1051px){
+@media screen and (min-width: 1168px){
     .dados{
         padding-left: 10%;
     }

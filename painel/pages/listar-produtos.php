@@ -3,6 +3,7 @@
 if(!isset($_SESSION['login'])){
     header('Location'.INCLUDE_PATH_PAINEL);
 }
+date_default_timezone_set('America/Sao_Paulo');
 
 $sql_categoria = MySQL::conectar()->query("SELECT * FROM `categoria`");
 $result_categoria = $sql_categoria->fetchAll();
@@ -78,6 +79,7 @@ $result = $sql->fetchAll();
             <p><b>Preço Venda:</b> R$".$value['valorvenda']."</p>
             <p><b>Quantidade:</b> ".$value['quantidade']." UN</p>
         </div>";
+        
         }
     ?>
     <div class='clear'></div>
@@ -105,7 +107,7 @@ $result = $sql->fetchAll();
     function deletar(id){
         var id = id;
         Swal.fire({
-            title: 'Você deseja excluir o usuário selecionado?',
+            title: 'Você deseja excluir o produto selecionado?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: 'green',
@@ -117,9 +119,10 @@ $result = $sql->fetchAll();
             $.ajax({
                 method: "POST",
                 url: "http://localhost/sistemacompraevenda/painel/listar-produtos",
-                data: {deletar: id}
+                data: {deletar: id},
             });
-        window.location.href="http://localhost/sistemacompraevenda/painel/listar-produtos";
+            window.location.href="http://localhost/sistemacompraevenda/painel/listar-produtos";
+
         }
 })
     };

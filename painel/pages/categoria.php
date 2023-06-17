@@ -78,7 +78,7 @@ $fetch = $sqlselect->fetchAll();
 
 <script>
 function pegaid(id,nome){
-    $('.'+id).replaceWith($('<form id="formulario" method="POST" action=""><input name="novo-nome" type="text" style="height: 22px; font-size: 17px" value='+nome+'><input name="id" type="hidden" value='+id+'></form>'));   
+    $('.'+id).replaceWith($('<form id="formulario" method="POST" action=""><input name="novo-nome" type="text" style="height: 22px; font-size: 17px" value=\"'+nome+'\"><input name="id" type="hidden" value='+id+'></form>'));   
     $(document).keypress(function(e) {
         if(e.which == 13){
             $("#formulario").submit();

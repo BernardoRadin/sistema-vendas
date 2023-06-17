@@ -2,6 +2,11 @@
 if(isset($_GET['loggout'])){
     Painel::loggout();
 }
+
+if(!isset($_SESSION['login'])){
+    header('Location'.INCLUDE_PATH_PAINEL);
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

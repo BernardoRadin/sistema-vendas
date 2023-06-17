@@ -15,11 +15,11 @@
 .foreach{
     float: left;
     border-top: solid;
-    width: 220px; 
+    width: auto; 
     height: auto;
     cursor: pointer;
     margin: 20px;
-    margin-top: 52px;
+    margin-top: 60px;
 }
 
 .p-nome{
