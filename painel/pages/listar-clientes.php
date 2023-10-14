@@ -11,21 +11,22 @@ if(isset($_POST['deletar'])){
 }
 
 if(isset($_POST['editar_acao'])){
-    $id = $_POST['id'];
-    $nome = $_POST['nome'];
-    $datanasc = $_POST['datanasc'];
-    $datanasc = date('Y/m/d', strtotime($datanasc));
-    $cpf = $_POST['cpf'];
-    $email = $_POST['email'];
-    $telefone = $_POST['telefone'];
+    if(isset($_POST['id']) && isset($_POST['nome']) && isset($_POST['datanasc']) && isset($_POST['cpf']) && isset($_POST['email']) && isset($_POST['telefone'])){
+        $id = $_POST['id'];
+        $nome = $_POST['nome'];
+        $datanasc = date('Y/m/d', strtotime($_POST['datanasc']));
+        $cpf = $_POST['cpf'];
+        $email = $_POST['email'];
+        $telefone = $_POST['telefone'];
 
-    $sql_editar = MySQL::conectar()->prepare("UPDATE `clientes` SET `nome` = (?),`datanasc` = (?), `cpf` = (?), `email` = (?), `telefone` = (?) WHERE `id` = (?)");
-    $sql_editar->execute(array($nome,$datanasc,$cpf,$email,$telefone,$id));
+        $sql_editar = MySQL::conectar()->prepare("UPDATE `clientes` SET `nome` = (?),`datanasc` = (?), `cpf` = (?), `email` = (?), `telefone` = (?) WHERE `id` = (?)");
+        $sql_editar->execute(array($nome,$datanasc,$cpf,$email,$telefone,$id));
+    }
 }
 
 $sql = MySQL::conectar()->query("SELECT * FROM `clientes`");
 $result = $sql->fetchAll();
-    
+
 ?>
 <head>
     <link rel="stylesheet" href="<?php INCLUDE_PATH_PAINEL?>css/listar-clientes.css">
@@ -59,13 +60,18 @@ $result = $sql->fetchAll();
     <div class="clear"></div>
     </div>
 </div>
+<script src="<?php INCLUDE_PATH_PAINEL ?>js/mascaras.js"></script>
 <script>
+
     function pegaid(id,nome,datanasc,cpf,email,telefone){
         $('.caixa-meio').append(
-                '<form id="formulario" method="POST" action=""><input type="hidden" name="id" value='+id+'><label>Nome: </label><br><input type="text" name="nome" value=\"'+nome+'\" required></select><br><label>Data Nascimento:</label><br><input type="text" name="datanasc" value=\"'+datanasc+'\" required><br><label>CPF: </label><br><input type="text" name="cpf" value='+cpf+' required><br><label>Email:</label><br><input type="text" name="email" value='+email+' required><br><label>Telefone: </label><br><input type="text" name="telefone" value=\"'+telefone+'\" required><br><br><input type="submit" class="editar" name="editar_acao" value="Editar"><br><br></form>')
+                '<form id="formulario" method="POST" action=""><input type="hidden" name="id" value='+id+'><label>Nome: </label><br><input type="text" name="nome" value=\"'+nome+'\" required><br><label>Data Nascimento:</label><br><input type="date" name="datanasc" value=\"'+datanasc+'\" required><br><label>CPF: </label><br><input type="text" id="cpf" name="cpf" value='+cpf+' maxlength="14" required><br><label>Email:</label><br><input type="text" name="email" value='+email+' required><br><label>Telefone: </label><br><input type="text" id="telefone" name="telefone" value=\"'+telefone+'\" maxlength="16" required><br><br><input type="submit" class="editar" name="editar_acao" value="Editar"><br><br></form>')
         $('.container2').css('display', 'block')
         $('.caixa').slideDown()
         $(".caixa-meio").slideDown();
+
+        $('#cpf').on('keypress', mascaraCpf)
+        $('#telefone').on('keypress',mascaraTelefone)
 
         $('.container2').click(function() {
             $('.container2').css('display', 'none');
@@ -75,9 +81,9 @@ $result = $sql->fetchAll();
     }
 
     function deletar(id){
-    var id = id
+        var id = id
         Swal.fire({
-            title: 'Você deseja excluir o usuário selecionado?',
+            text: 'Você deseja excluir o usuário selecionado?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: 'green',

@@ -28,33 +28,38 @@ $gvendas = $sql_vendas->fetchAll();
 <head>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-      google.charts.load('current', {'packages':['corechart']});
+      google.charts.load('current', {'packages':['corechart'], 'language': 'pt'});
       google.charts.setOnLoadCallback(drawChart);
 
       function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Ano', 'Quantidade Vendida'],
+        var data = new google.visualization.DataTable();
+        data.addColumn('date', 'Data');
+        data.addColumn('number', 'Quantidade Vendida');
 
         <?php
-            foreach($gvendas as $value){ 
-                $vendas = $value['quantidade'];   
-                $gdata = strtotime($value['data']);
-                $gdata = date('d/m/Y H:i', $gdata);       
+        if (!empty($gvendas)) {
+            foreach ($gvendas as $value) {
+            $vendas = $value['quantidade'];
+            $gdata = strtotime($value['data']);
+            ?>
+            data.addRow([new Date(<?php echo $gdata * 1000 ?>), <?php echo $vendas ?>]);
+            <?php
+            }
+        } else {
+            echo "data.addRow([new Date(), 0]);";
+        }
         ?>
-        ['<?php echo $gdata ?>', <?php echo $vendas?>],
-        <?php } ?>
-        ]);
 
         var options = {
-          title: 'Performance',
-          hAxis: {title: 'Ano',  titleTextStyle: {color: '#ffff'}},
-          vAxis: {minValue: 0},
+            title: 'Gráfico Vendas',
+            hAxis: { title: 'Ano', titleTextStyle: { color: '#ffff' } , format: 'd/M HH:mm'},
+            vAxis: { minValue: 0 },
         };
 
         var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
         chart.draw(data, options);
-      }
-    </script>
+    }   
+ </script>
     <link rel="stylesheet" href="<?php INCLUDE_PATH_PAINEL ?>css/home.css">
 </head>
 <div class="container">
@@ -63,11 +68,11 @@ $gvendas = $sql_vendas->fetchAll();
         <h1>R$: <?php echo $total?></h1>
     </div>
     <div class="load2">
-        <p><b>Vendas realizadas no mês</b></p>
+        <p><b>Vendas realizadas</b></p>
         <h1><?php echo $numerovendas?> Vendas</h1>
     </div>
     <div class="load3">
-    <p><b>Quantidade de compras no mês</b></p>
+    <p><b>Quantidade de compras</b></p>
         <h1><?php echo $total_quantidade?> UN</h1>
     </div>
     <div class="clear"></div> 

@@ -6,7 +6,8 @@
     };
 
     spl_autoload_register($autoload);
-    
+    date_default_timezone_set('America/Sao_Paulo');
+
     define('INCLUDE_PATH','http://localhost/sistemacompraevenda/');
     define('INCLUDE_PATH_PAINEL','http://localhost/sistemacompraevenda/painel/');
 

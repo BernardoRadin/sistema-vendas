@@ -8,6 +8,21 @@
     border-width: 2px;
 }
 
+
+.valorcompra,.valorvenda{
+    padding-left: 30px;
+    height: 35px;
+    width: 97%;
+    margin-bottom: 20px;
+    font-size: 15px;
+}
+
+.label-reais{
+    position: absolute;
+    top: 29px;
+    left: 5px;
+}
+
 .form{
     margin-top: 60px;
 }

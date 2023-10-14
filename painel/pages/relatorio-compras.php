@@ -35,9 +35,9 @@ if(!isset($_POST['enviadata']) && !isset($_POST['datainicial'])){
 <head><link rel="stylesheet" href="<?php INCLUDE_PATH_PAINEL ?>css/relatorio.css"/></head>
 <div class="container">
     <form method="POST" action="">
-      <label><b>Data Inicial: </b></label>
+      <label><b>Filtrar por data da compra: </b></label><br/><br/>
         <input type="date" name="datainicial">
-        <label><b>Data Final: </b></label>
+        <label><b> até </b></label>
         <input type="date" name="datafinal">
         <input class="enviar" type="submit" name="enviadata">
     </form>

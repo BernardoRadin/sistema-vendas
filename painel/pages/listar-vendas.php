@@ -3,27 +3,17 @@ if(!isset($_SESSION['login'])){
     header('Location'.INCLUDE_PATH_PAINEL);
 }
 
-if(isset($_POST['editar_acao'])){
-    $id = $_POST['id'];
-    $produto = $_POST['produto'];
-    $cliente = $_POST['clientes'];
-
-    $sql_editar = MySQL::conectar()->prepare("UPDATE `vendas` SET `produtovenda_id` = (?), `clientevenda_id` = (?) WHERE `id` = (?)");
-    $sql_editar->execute(array($produto,$cliente,$id));
-    
-}
-
 if(isset($_POST['deletar'])){
     $id = $_POST['deletar'];
 
-    $sql_select = MySQL::conectar()->prepare("SELECT produtos.id,vendas.quantidade,`valorcompra` FROM `vendas` INNER JOIN `produtos` ON vendas.produtovenda_id = produtos.id WHERE vendas.id = (?)");
+    $sql_select = MySQL::conectar()->prepare("SELECT produtos.id,vendas.quantidade,valorvenda FROM `vendas` INNER JOIN `produtos` ON vendas.produtovenda_id = produtos.id WHERE vendas.id = (?)");
     $sql_select->execute(array($id));
     $result_select = $sql_select->fetchAll();
     $idproduto = $result_select[0]['id'];
     $quantidadecomprada = $result_select[0]['quantidade'];
-    $valorcompra = $result_select[0]['valorcompra'];
+    $valorvenda = $result_select[0]['valorvenda'];
 
-    $dinheiro = $quantidadecomprada * $valorcompra;
+    $dinheiro = $quantidadecomprada * $valorvenda;
     $sql = MySQL::conectar()->prepare("INSERT INTO `dinheiro` (`dinheiro`) VALUES (?)");
     $sql->execute(array(-$dinheiro));
 
@@ -70,7 +60,7 @@ if(isset($_POST['deletar'])){
     function deletar(id){
     var id = id;
         Swal.fire({
-            title: 'Você deseja excluir a venda selecionada?',
+            text: 'Você deseja excluir a venda selecionada?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: 'green',

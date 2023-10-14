@@ -1,54 +1,60 @@
 <?php
+date_default_timezone_set('America/Sao_Paulo');
 
 if(!isset($_SESSION['login'])){
     header('Location'.INCLUDE_PATH_PAINEL);
 }
-date_default_timezone_set('America/Sao_Paulo');
 
-$sql_categoria = MySQL::conectar()->query("SELECT * FROM `categoria`");
+$sql_categoria = MySQL::conectar()->query("SELECT `id`,`nome_categoria` FROM `categoria`");
 $result_categoria = $sql_categoria->fetchAll();
 
 if(isset($_POST['deletar'])){
     $id = $_POST['deletar'];
-    $sql_editar = MySQL::conectar()->prepare("DELETE FROM `produtos` WHERE `id` = (?)");
-    $sql_editar->execute(array($id));
+    $sql_apagar = MySQL::conectar()->prepare("UPDATE `produtos` SET `excluido` = 1 WHERE `id` = (?)");
+    $sql_apagar->execute(array($id));
+    if(!empty($sql_apagar->errorInfo()[1])){
+        http_response_code(500);
+        return;
+    };
 }
 
 if(isset($_POST['editar_acao'])){
-    $id = $_POST['id'];
-    $nome = $_POST['nome'];
-    $categoria = $_POST['categoria'];
-    $descricao = $_POST['descricao'];
-    $valorvenda = $_POST['valorvenda'];
-    $valorcompra = $_POST['valorcompra'];
-    $empresa = $_POST['empresa'];
-    $quantidade = $_POST['quantidade'];
+    if(isset($_POST['nome']) && isset($_POST['categoria']) && !empty($_POST['categoria']) && isset($_POST['descricao']) && isset($_POST['valorvenda']) && is_numeric($_POST['valorvenda']) && isset($_POST['valorcompra']) && is_numeric($_POST['valorcompra']) && isset($_POST['empresa']) && isset($_POST['quantidade']) && is_numeric($_POST['quantidade'])){
+        $id = $_POST['id'];
+        $nome = $_POST['nome'];
+        $categoria = $_POST['categoria'];
+        $descricao = $_POST['descricao'];
+        $valorvenda = $_POST['valorvenda'];
+        $valorcompra = $_POST['valorcompra'];
+        $empresa = $_POST['empresa'];
+        $quantidade = $_POST['quantidade'];
 
-    $sql_quantidade = MySQL::conectar()->prepare("SELECT `quantidade`,`valorcompra` FROM `produtos` WHERE `id` = (?)");
-    $sql_quantidade->execute(array($id));
-    $result = $sql_quantidade->fetchAll();
-    $quantidadetotal = $result[0][0];
+        $sql_quantidade = MySQL::conectar()->prepare("SELECT `quantidade`,`valorcompra` FROM `produtos` WHERE `id` = (?)");
+        $sql_quantidade->execute(array($id));
+        $result = $sql_quantidade->fetchAll();
+        $quantidadetotal = $result[0][0];
 
 
-    if($quantidade > $quantidadetotal){
-        $data = date('Y.m.d H:i');
-        $quantidadenova = $quantidade - $quantidadetotal;
-        $sql_novaquantidade = MySQL::conectar()->prepare("INSERT INTO `reporestoque`(`data`,`quantidadenova`,`id_produto`) VALUES (?,?,?)");
-        $sql_novaquantidade->execute(array($data,$quantidadenova,$id));
+        if($quantidade > $quantidadetotal){
+            $data = date('Y.m.d H:i');
+            $quantidadenova = $quantidade - $quantidadetotal;
+            $sql_novaquantidade = MySQL::conectar()->prepare("INSERT INTO `reporestoque`(`data`,`quantidadenova`,`id_produto`) VALUES (?,?,?)");
+            $sql_novaquantidade->execute(array($data,$quantidadenova,$id));
 
-        $dinheiro = $quantidadenova * $valorcompra;
-        $sql = MySQL::conectar()->prepare("INSERT INTO `dinheiro` (`dinheiro`) VALUES (?)");
-        $sql->execute(array(-$dinheiro));
+            $dinheiro = $quantidadenova * $valorcompra;
+            $sql = MySQL::conectar()->prepare("INSERT INTO `dinheiro` (`dinheiro`) VALUES (?)");
+            $sql->execute(array(-$dinheiro));
 
+        }
+
+        $sql_editar = MySQL::conectar()->prepare("UPDATE `produtos` SET `nomeproduto` = (?),`categoria` = (?), `descricao` = (?), `valorvenda` = (?), `valorcompra` = (?), `empresaproduto` = (?), `quantidade`= (?) WHERE `id` = (?)");
+        $sql_editar->execute(array($nome,$categoria,$descricao,$valorvenda,$valorcompra,$empresa,$quantidade,$id));
     }
-
-    $sql_editar = MySQL::conectar()->prepare("UPDATE `produtos` SET `nomeproduto` = (?),`categoria` = (?), `descricao` = (?), `valorvenda` = (?), `valorcompra` = (?), `empresaproduto` = (?), `quantidade`= (?) WHERE `id` = (?)");
-    $sql_editar->execute(array($nome,$categoria,$descricao,$valorvenda,$valorcompra,$empresa,$quantidade,$id));
 }
 
-$sql = MySQL::conectar()->query("SELECT * FROM `produtos`");
+$sql = MySQL::conectar()->query("SELECT * FROM `produtos` WHERE excluido = 0");
 $result = $sql->fetchAll();
-    
+
 ?>
 <head>
     <link rel="stylesheet" href="<?php INCLUDE_PATH_PAINEL?>css/listar-produtos.css">
@@ -62,7 +68,7 @@ $result = $sql->fetchAll();
             if($value['categoria'] == $value2['id']){
                 $categoria = $value2['nome_categoria'];
             }
-        }    
+        }
         if(!isset($categoria)){
             $categoria = "Não";
         }
@@ -79,7 +85,7 @@ $result = $sql->fetchAll();
             <p><b>Preço Venda:</b> R$".$value['valorvenda']."</p>
             <p><b>Quantidade:</b> ".$value['quantidade']." UN</p>
         </div>";
-        
+
         }
     ?>
     <div class='clear'></div>
@@ -88,11 +94,10 @@ $result = $sql->fetchAll();
 <script>
     function pegaid(id,nome,categoria,descricao,valorvenda,valorcompra,empresa,quantidade){
         $('.caixa-meio').append(
-                '<form id="formulario" method="POST" action=""><input type="hidden" name="id" value=\"'+id+'\"><label>Nome Produto:</label><br><input type="text" name="nome" value=\"'+nome+'\" required><br><label>Categoria:</label><br><select name="categoria"><?php $conn = MySQL::conectar()->query("SELECT * FROM `categoria`"); $sql = $conn->fetchAll(); foreach($sql as $value){echo "<option value=".$value['id'].">".$value['nome_categoria']."</option><br>"; } ?>
-                </select><br><label>Descrição:</label><br><input type="text" name="descricao" value=\"'+descricao+'\" required><br><label>Valor da Venda:</label><br><input type="text" name="valorvenda" value=\"'+valorvenda+'\" required><br><label>Valor da Compra:</label><br><input type="text" name="valorcompra" value=\"'+valorcompra+'\" required><br><label>Empresa do produto:</label><br><input type="text" name="empresa" value=\"'+empresa+'\" required><br><label>Quantidade:</label><br><input type="text" name="quantidade" value=\"'+quantidade+'\" required><br><br><input type="submit" class="editar" name="editar_acao" value="Editar"><br><br></form><label style="float: right; color: red; padding: 10px; font-weight: bold; cursor: pointer" onclick=\"deletar('+id+')\">Deletar</label>')
+                '<form id="formulario" method="POST" action=""><input type="hidden" name="id" value=\"'+id+'\"><label>Nome Produto:</label><br><input type="text" name="nome" value=\"'+nome+'\" required><br><label>Categoria:</label><br><select name="categoria"><?php $conn = MySQL::conectar()->query('SELECT `id`, `nome_categoria` FROM `categoria`'); $sql = $conn->fetchAll(); foreach($sql as $value){echo "<option value=".$value['id'].">".$value['nome_categoria']."</option><br>"; } ?></select><br/><label>Descrição:</label><br/><input type="text" name="descricao" value=\"'+descricao+'\" required><br/><label>Valor da Venda:</label><br><input type="text" name="valorvenda" value=\"'+valorvenda+'\" required><br><label>Valor da Compra:</label><br><input type="text" name="valorcompra" value=\"'+valorcompra+'\" required><br><label>Empresa do produto:</label><br><input type="text" name="empresa" value=\"'+empresa+'\" required><br><label>Quantidade:</label><br><input type="text" name="quantidade" value=\"'+quantidade+'\" required><br><br><input type="submit" class="editar" name="editar_acao" value="Editar"><br><br></form><label style="float: right; color: red; padding: 10px; font-weight: bold; cursor: pointer" onclick=\"deletar('+id+')\">Deletar</label>')
         $('.container2').css('display', 'block')
         $('body').css('overflow', 'hidden')
-        $('.caixa').slideDown()        
+        $('.caixa').slideDown()
         window.scrollTo(0, 0);
         $(".caixa-meio").slideDown();
 
@@ -105,9 +110,8 @@ $result = $sql->fetchAll();
     }
 
     function deletar(id){
-        var id = id;
         Swal.fire({
-            title: 'Você deseja excluir o produto selecionado?',
+            text: 'Você deseja excluir o produto selecionado?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: 'green',
@@ -118,11 +122,19 @@ $result = $sql->fetchAll();
         if (result.isConfirmed) {
             $.ajax({
                 method: "POST",
-                url: "http://localhost/sistemacompraevenda/painel/listar-produtos",
+                url: "",
                 data: {deletar: id},
+                success: function(){
+                    window.location.href="http://localhost/sistemacompraevenda/painel/listar-produtos";
+                },
+                error: function(){
+                    Swal.fire(
+                    'Ocorreu um erro',
+                    'Tente novamente!',
+                    'error'
+                    )
+                }
             });
-            window.location.href="http://localhost/sistemacompraevenda/painel/listar-produtos";
-
         }
 })
     };

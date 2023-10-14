@@ -31,8 +31,8 @@ input[type=date]{
     transition: 0.3s;
 }
 
-table, th, td {
-    border: 1px solid black;
+table, td {
+    border: 1px solid rgb(216, 216, 216);
     margin: auto;
 }
 
